@@ -1,0 +1,22 @@
+{
+  "check-coverage": true,
+  "lines": 95,
+  "branches": 95,
+  "functions": 95,
+  "include": ["src/**/*.ts"],
+  "exclude": [
+      "test",
+      "build",
+      "coverage",
+      "dist",
+      "**/*.spec.ts"
+  ],
+  "reporter": [
+      "text",
+      "lcov"
+  ],  
+  "extension": [
+      ".ts"
+  ],
+  "all": true
+}
