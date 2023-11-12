@@ -1,3 +1,4 @@
+import {HalFormsTemplate} from './hal-forms-template';
 import {HalLink} from './hal-link';
 
 export type HalFormsResourceInit<T> = {
@@ -7,6 +8,7 @@ export type HalFormsResourceInit<T> = {
     string,
     HalFormsResource<unknown> | HalFormsResource<unknown>[]
   >;
+  templates: Record<string, HalFormsTemplate>;
   content?: T;
 };
 
@@ -19,6 +21,7 @@ export class HalFormsResource<T> {
     string,
     HalFormsResource<unknown> | HalFormsResource<unknown>[]
   >;
+  private readonly _templates: Record<string, HalFormsTemplate>;
 
   /**
    * Relationship between this resource and the root resource. Useful when
@@ -37,6 +40,7 @@ export class HalFormsResource<T> {
     this.rel = init.rel;
     this._links = init.links;
     this._embedded = init.embedded;
+    this._templates = init.templates;
     this.content = init.content;
   }
 
@@ -147,6 +151,27 @@ export class HalFormsResource<T> {
       throw new Error(`Link ${rel} is monovalued`);
     }
     return embedded as HalFormsResource<T>[];
+  }
+
+  /**
+   * Gets the template whose name is provided if it exists
+   * @param key Key (identifier) of the template to get
+   * @returns The requested template or undefined if no template
+   * with this key exists
+   */
+  public template(key: string): HalFormsTemplate | undefined {
+    return this._templates[key];
+  }
+
+  /**
+   * Gets all the templates of this resource as an array
+   * @returns undefined if this resource defines no template
+   */
+  public templates(): HalFormsTemplate[] | undefined {
+    if (Object.keys(this._templates).length === 0) {
+      return undefined;
+    }
+    return Object.values(this._templates).flat();
   }
 
   private ensureArray<A>(maybeArray: A | A[]): A[] {

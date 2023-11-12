@@ -34,6 +34,7 @@ export class HalResponse extends Response {
         rel: 'self',
         embedded: {},
         links: {},
+        templates: {},
       });
     }
 
