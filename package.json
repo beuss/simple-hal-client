@@ -2,6 +2,14 @@
   "name": "@orniz/simple-hal-client",
   "version": "1.0.0-alpha.2",
   "description": "Simple HAL(-FORMS) client",
+  "homepage": "https://github.com/beuss/simple-hal-client",
+  "bugs": {
+    "url": "https://github.com/beuss/simple-hal-client/issues"
+  },
+  "author": {
+    "name": "Sébastien Le Ray",
+    "email": "sebastien-github@orniz.org"
+  },
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
