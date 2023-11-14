@@ -3,23 +3,78 @@ import {parseHal} from '../hal/hal-parser';
 import {SimpleHalClient} from './simple-hal-client';
 
 /**
- * Response subclass returned by SimpleHalClient#fetch. This can be used
+ * Response implementation returned by SimpleHalClient#fetch. This can be used
  * as a standard response with an additional method #hal() that will try
  * to process the response as an HAL document. This allows seamless integration
  * with existing code base and keeping all standard feature of a response
  * (status check, other content types handling)
  */
-export class HalResponse extends Response {
+export class HalResponse implements Response {
   constructor(
-    source: Response,
+    private readonly wrapped: Response,
     private readonly base: string,
     private readonly client: SimpleHalClient
-  ) {
-    super(source.body, {
-      headers: source.headers,
-      status: source.status,
-      statusText: source.statusText,
-    });
+  ) {}
+
+  get body(): ReadableStream<Uint8Array> | null {
+    return this.wrapped.body;
+  }
+
+  get bodyUsed(): boolean {
+    return this.wrapped.bodyUsed;
+  }
+
+  get headers(): Headers {
+    return this.wrapped.headers;
+  }
+
+  get ok(): boolean {
+    return this.wrapped.ok;
+  }
+
+  get redirected(): boolean {
+    return this.wrapped.redirected;
+  }
+
+  get status(): number {
+    return this.wrapped.status;
+  }
+
+  get statusText(): string {
+    return this.wrapped.statusText;
+  }
+
+  get type(): ResponseType {
+    return this.wrapped.type;
+  }
+
+  get url(): string {
+    return this.wrapped.url;
+  }
+
+  arrayBuffer(): Promise<ArrayBuffer> {
+    return this.wrapped.arrayBuffer();
+  }
+
+  blob(): Promise<Blob> {
+    return this.wrapped.blob();
+  }
+
+  clone(): Response {
+    return new HalResponse(this.wrapped.clone(), this.base, this.client);
+  }
+
+  formData(): Promise<FormData> {
+    return this.wrapped.formData();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  json(): Promise<any> {
+    return this.wrapped.json();
+  }
+
+  text(): Promise<string> {
+    return this.wrapped.text();
   }
 
   /**
