@@ -83,7 +83,8 @@ export class HalResponse implements Response {
    * be an empty HalFormsResource
    * @throws Error if the response is not a valid JSON document
    */
-  public async hal<T>(): Promise<HalFormsResource<T>> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async hal<T = any>(): Promise<HalFormsResource<T>> {
     if (this.status === 204) {
       return new HalFormsResource<T>({
         rel: 'self',

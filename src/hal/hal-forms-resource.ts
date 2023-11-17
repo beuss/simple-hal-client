@@ -1,7 +1,8 @@
 import {HalFormsTemplate} from './hal-forms-template';
 import {HalLink} from './hal-link';
 
-export type HalFormsResourceInit<T> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type HalFormsResourceInit<T = any> = {
   rel: string;
   links: Record<string, HalLink | HalLink[]>;
   embedded: Record<
@@ -15,7 +16,8 @@ export type HalFormsResourceInit<T> = {
 /**
  * Resource as per HAL-FORMS definition
  */
-export class HalFormsResource<T> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class HalFormsResource<T = any> {
   private readonly _links: Record<string, HalLink | HalLink[]>;
   private readonly _embedded: Record<
     string,
@@ -116,7 +118,8 @@ export class HalFormsResource<T> {
    * (there is no directive in the spec about how this should be handled but it seems
    * logical to adopt the same behavior as for links)
    */
-  public embedded<E>(rel: string): HalFormsResource<E> | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public embedded<E = any>(rel: string): HalFormsResource<E> | undefined {
     const embedded = this._embedded[rel];
     if (embedded === undefined) {
       return undefined;
@@ -136,7 +139,8 @@ export class HalFormsResource<T> {
    * @throws Error if the requested embedded does not appear as an array in the original
    * document
    */
-  public embeddeds<E>(rel?: string): HalFormsResource<E>[] | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public embeddeds<E = any>(rel?: string): HalFormsResource<E>[] | undefined {
     if (Object.keys(this._embedded).length === 0) {
       return undefined;
     }
