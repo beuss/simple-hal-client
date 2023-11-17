@@ -2,6 +2,7 @@ import {HalResponse} from '../client/hal-response';
 import {SimpleHalClient} from '../client/simple-hal-client';
 import * as urlTemplate from 'url-template';
 import {absolutize} from '../utils/url';
+import {HalFormsResource} from './hal-forms-resource';
 export type HalLinkInit = {
   href: string;
   rel: string;
@@ -113,5 +114,23 @@ export class HalLink {
       client = this.client;
     }
     return client.fetch(absolutize(target, this.base));
+  }
+
+  /**
+   * Shortcut to get HAL resource pointed by this link. Avoids multiple consecutive
+   * awaits in caller when an HALResponse is expected.
+   * @param variables Variables to use for URL template extension
+   * @param client Client to use for fetching, defaults to the client used
+   * to create this instance
+   * @returns A promise resolving to the remote end response parsed as an HAL-FORMS
+   * resource.
+   * @see follow()
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async followHal<T = any>(
+    variables?: Record<string, string | string[] | number | number[]>,
+    client?: SimpleHalClient
+  ): Promise<HalFormsResource<T>> {
+    return (await this.follow(variables, client)).hal();
   }
 }

@@ -314,6 +314,33 @@ describe('HAL forms link processing', () => {
     expect(consoleStub.calledOnce).to.be.true;
     expect(consoleStub.firstCall.firstArg).to.have.string('v1:artist');
   });
+
+  it('should allow to directly fetch hal', async () => {
+    const client = new TestHalClient('https://hal-links.test', {
+      _links: {
+        daughter: {
+          href: '/person/543',
+        },
+      },
+    });
+    const daughterClient = new TestHalClient('https://hal-links.test', {
+      _links: {
+        self: {
+          href: '/person/543',
+        },
+      },
+    });
+
+    const response = await client.fetch();
+
+    const halDocument: HalFormsResource<any> = await response.hal();
+
+    const daughterDocument = await halDocument
+      .link('daughter')
+      ?.followHal(undefined, daughterClient);
+    expect(daughterDocument).not.to.be.undefined;
+    expect(daughterDocument!.link('self')!.href).to.eql('/person/543');
+  });
 });
 
 afterEach(() => {

@@ -53,6 +53,15 @@ describe('HAL client', () => {
 
     expect(true).to.be.true;
   });
+
+  it('should allow to directly fetch HAL', async () => {
+    const client = new TestHalClient('https://hal-forms.test/', {
+      _links: {self: {href: '/customer/421'}},
+    });
+
+    const customer = await client.fetchHal('/customer/421');
+    expect(customer.link('self')?.href).to.eql('/customer/421');
+  });
 });
 
 class NoContentResponse implements Response {

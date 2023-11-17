@@ -1,3 +1,4 @@
+import {HalFormsResource} from '../hal/hal-forms-resource';
 import {absolutize} from '../utils/url';
 import {Filter, DefaultFilterChain} from './filter';
 import {HalResponse} from './hal-response';
@@ -66,6 +67,26 @@ export class SimpleHalClient {
     const response: Response = await this.filterChain.process(this, request);
 
     return new HalResponse(response, request.url, this);
+  }
+
+  /**
+   * Shortcut to fetch a resource that we know is an HAL-FORMS document.
+   * Avoids multiple awaits in caller when an HALResponse is expected for
+   * the supplied URL
+   * @param input Target URL to fetch, will be absolutized using baseHref
+   * provided during construction. If omitted, baseHref will be fetched
+   * @param init Additional parameters for the request
+   * @returns A promise that will be resolved when remote end answers (or not)
+   * and HAL parsing succeeds
+   * @see SimpleHalClient.fetch
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async fetchHal<T = any>(
+    input?: RequestInfo,
+    init: RequestInit = {}
+  ): Promise<HalFormsResource<T>> {
+    const response = await this.fetch(input, init);
+    return response.hal();
   }
 
   private buildAcceptHeader() {
