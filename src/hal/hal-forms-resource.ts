@@ -116,7 +116,7 @@ export class HalFormsResource<T> {
    * (there is no directive in the spec about how this should be handled but it seems
    * logical to adopt the same behavior as for links)
    */
-  public embedded<T>(rel: string): HalFormsResource<T> | undefined {
+  public embedded<E>(rel: string): HalFormsResource<E> | undefined {
     const embedded = this._embedded[rel];
     if (embedded === undefined) {
       return undefined;
@@ -124,7 +124,7 @@ export class HalFormsResource<T> {
     if (Array.isArray(embedded)) {
       throw new Error(`Embedded ${rel} is multivalued`);
     }
-    return embedded as HalFormsResource<T>;
+    return embedded as HalFormsResource<E>;
   }
 
   /**
@@ -136,12 +136,12 @@ export class HalFormsResource<T> {
    * @throws Error if the requested embedded does not appear as an array in the original
    * document
    */
-  public embeddeds<T>(rel?: string): HalFormsResource<T>[] | undefined {
+  public embeddeds<E>(rel?: string): HalFormsResource<E>[] | undefined {
     if (Object.keys(this._embedded).length === 0) {
       return undefined;
     }
     if (rel === undefined) {
-      return Object.values(this._embedded).flat() as HalFormsResource<T>[];
+      return Object.values(this._embedded).flat() as HalFormsResource<E>[];
     }
     const embedded = this._embedded[rel];
     if (embedded === undefined) {
@@ -150,7 +150,7 @@ export class HalFormsResource<T> {
     if (!Array.isArray(embedded)) {
       throw new Error(`Link ${rel} is monovalued`);
     }
-    return embedded as HalFormsResource<T>[];
+    return embedded as HalFormsResource<E>[];
   }
 
   /**
