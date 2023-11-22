@@ -85,15 +85,6 @@ export class HalResponse implements Response {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async hal<T = any>(): Promise<HalFormsResource<T>> {
-    if (this.status === 204) {
-      return new HalFormsResource<T>({
-        rel: 'self',
-        embedded: {},
-        links: {},
-        templates: {},
-      });
-    }
-
     const json = await this.json();
     return parseHal(this.base, json, this.client) as HalFormsResource<T>;
   }

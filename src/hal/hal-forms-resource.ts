@@ -10,7 +10,7 @@ export type HalFormsResourceInit<T = any> = {
     HalFormsResource<unknown> | HalFormsResource<unknown>[]
   >;
   templates: Record<string, HalFormsTemplate>;
-  content?: T;
+  content: T;
 };
 
 /**
@@ -36,7 +36,7 @@ export class HalFormsResource<T = any> {
    * Content of this resource (application specific fields, stripped from all
    * HAL-FORMS elements)
    */
-  public readonly content?: T;
+  public readonly content: T;
 
   constructor(init: HalFormsResourceInit<T>) {
     this.rel = init.rel;
