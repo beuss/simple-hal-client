@@ -16,6 +16,11 @@ export type HalLinkInit = {
   hreflang?: string;
 };
 
+export type UriVariables = Record<
+  string,
+  string | string[] | number | number[]
+>;
+
 /**
  * Link as per HAL specification
  */
@@ -95,7 +100,7 @@ export class HalLink {
    * HAL-FORMS resource or not.
    */
   public follow(
-    variables?: Record<string, string | string[] | number | number[]>,
+    variables?: UriVariables,
     client?: SimpleHalClient
   ): Promise<HalResponse> {
     // A client SHOULD provide some notification (for example, by logging a warning message) whenever it traverses over a link that has this property.
@@ -104,16 +109,26 @@ export class HalLink {
         `Following deprecated link with rel ${this.rel}, more information at ${this.deprecation}`
       );
     }
+    if (client === undefined) {
+      client = this.client;
+    }
+    return client.fetch(this.resolve(variables));
+  }
+
+  /**
+   * Resolves this link's target using the specified replacement variables
+   * (if it is templated)
+   * @param variables Substitution variables for templated URI resolution
+   * @returns The absolute URI this links points to
+   */
+  public resolve(variables?: UriVariables): string {
     let target;
     if (this.templated) {
       target = this.urlTemplate.expand(variables ?? {});
     } else {
       target = this.href;
     }
-    if (client === undefined) {
-      client = this.client;
-    }
-    return client.fetch(absolutize(target, this.base));
+    return absolutize(target, this.base);
   }
 
   /**
@@ -128,7 +143,7 @@ export class HalLink {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async followHal<T = any>(
-    variables?: Record<string, string | string[] | number | number[]>,
+    variables?: UriVariables,
     client?: SimpleHalClient
   ): Promise<HalFormsResource<T>> {
     return (await this.follow(variables, client)).hal();
