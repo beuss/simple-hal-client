@@ -5,7 +5,7 @@ export type NextFilter = (request: Request) => Promise<Response>;
 /**
  * Params passed to a filter when processing
  */
-export type FilterParam = {
+export type FilterParams = {
   /**
    * Client currently running the chain
    */
@@ -24,7 +24,7 @@ export type FilterParam = {
 /**
  * Filter to be added to a chain in order to alter request or resposne
  */
-export type Filter = (params: FilterParam) => Promise<Response>;
+export type Filter = (params: FilterParams) => Promise<Response>;
 
 type FilterNode = {
   filter: Filter;

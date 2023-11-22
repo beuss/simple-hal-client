@@ -111,7 +111,7 @@ the returned `location` header (you can test it with Spring
 
 ```typescript
 const client = new SimpleHalClient('https://simple-hal-client.example/employees');
-this.client.appendFilter(async (params: FilterParam) => {
+this.client.appendFilter(async (params: FilterParams) => {
   const response = await params.next(params.request);
   if(response.status === 204 && response.headers.has('location')) {
     const body: ReadableStream = response.body as ReadableStream;
