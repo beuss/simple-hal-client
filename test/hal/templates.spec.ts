@@ -371,4 +371,20 @@ describe('HAL-FORMS template processing', () => {
     await template.invoke();
     expect(client.sentRequest.headers.has('content-type')).to.be.false;
   });
+
+  it('should automatically serialize JSON', async () => {
+    const client = new TestHalClient('https://hal-forms-templates.test', {
+      _templates: {
+        default: {
+          target: 'http://hal-forms-template.test/update',
+          method: 'POST',
+        },
+      },
+    });
+
+    const resource = await client.fetchHal();
+    const template = resource.template('default') as HalFormsTemplate;
+    await template.invoke({foo: 'bar'});
+    expect(true).to.be.true;
+  });
 });

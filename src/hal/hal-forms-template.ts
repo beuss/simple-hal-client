@@ -209,7 +209,10 @@ export class HalFormsTemplate {
    * filters). Defaults to the client used to retrieve this template's resource.
    * @returns A promise resolving when request completes or fails.
    */
-  invoke(payload?: BodyInit, client?: SimpleHalClient): Promise<HalResponse> {
+  invoke(
+    payload?: BodyInit | null | object,
+    client?: SimpleHalClient
+  ): Promise<HalResponse> {
     if (client === undefined) {
       client = this.client;
     }
@@ -218,11 +221,18 @@ export class HalFormsTemplate {
     // For multipart queries, content-type must contain boundary, which is set
     // by browser… but only if no content type has been defined
     if (!this.contentType.startsWith('multipart/')) {
+      if (
+        payload !== null &&
+        this.contentType === 'application/json' &&
+        typeof payload === 'object'
+      ) {
+        payload = JSON.stringify(payload);
+      }
       headers.set('content-type', this.contentType);
     }
 
     return client.fetch(this.resolvedUrl, {
-      body: payload,
+      body: payload as BodyInit | null | undefined,
       headers,
       method: this.method,
       redirect: 'follow',
