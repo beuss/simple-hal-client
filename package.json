@@ -1,6 +1,6 @@
 {
   "name": "@orniz/simple-hal-client",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Simple HAL(-FORMS) client",
   "homepage": "https://github.com/beuss/simple-hal-client",
   "bugs": {
