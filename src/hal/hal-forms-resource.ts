@@ -47,6 +47,20 @@ export class HalFormsResource<T = any> {
   }
 
   /**
+   * Shortcut method to get the absolute URI of this resource's
+   * self link
+   * @returns undefined if the resource defines no self link, otherwise
+   * the resolved self link's href.
+   */
+  public selfHref(): string | undefined {
+    const selfLink = this.link('self');
+    if (selfLink === undefined) {
+      return undefined;
+    }
+    return selfLink.resolve();
+  }
+
+  /**
    * Retrieves the link having the given relation with this resource
    * @param rel Relation of the link
    * @param name Optional name used to discriminate between several links with the same

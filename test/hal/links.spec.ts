@@ -11,6 +11,7 @@ describe('HAL forms link processing', () => {
     const response: HalResponse = await client.fetch();
     const halDocument: HalFormsResource<any> = await response.hal();
     expect(halDocument.links()).to.be.undefined;
+    expect(halDocument.selfHref()).to.be.undefined;
     expect(halDocument.content.foo).to.eql('bar');
   });
 

@@ -78,6 +78,7 @@ describe('HAL response processing using specification example', () => {
     const halDocument: HalFormsResource<any> = await response.hal();
 
     expect(halDocument.link('self')?.href).to.eql('/orders');
+    expect(halDocument.selfHref()).to.eql('http://hal.test/orders');
     await halDocument.link('self')?.follow();
     expect(client.sentRequest.url).to.eql('http://hal.test/orders');
 
@@ -125,6 +126,7 @@ describe('HAL response processing using specification example', () => {
     expect(orders[0].content.status).to.eql('shipped');
     expect(orders[0].links()).has.lengthOf(3);
     expect(orders[0].link('self')?.href).to.eql('/orders/123');
+    expect(orders[0].selfHref()).to.eql('http://hal.test/orders/123');
     expect(orders[0].link('ea:basket')?.href).to.eql('/baskets/98712');
     expect(orders[0].link('ea:customer')?.href).to.eql('/customers/7809');
 
@@ -133,6 +135,7 @@ describe('HAL response processing using specification example', () => {
     expect(orders[1].content.status).to.eql('processing');
     expect(orders[1].links()).has.lengthOf(3);
     expect(orders[1].link('self')?.href).to.eql('/orders/124');
+    expect(orders[1].selfHref()).to.eql('http://hal.test/orders/124');
     expect(orders[1].link('ea:basket')?.href).to.eql('/baskets/97213');
     expect(orders[1].link('ea:customer')?.href).to.eql('/customers/12369');
 
