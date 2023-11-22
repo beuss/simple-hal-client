@@ -214,11 +214,16 @@ export class HalFormsTemplate {
       client = this.client;
     }
 
+    const headers = new Headers();
+    // For multipart queries, content-type must contain boundary, which is set
+    // by browser… but only if no content type has been defined
+    if (!this.contentType.startsWith('multipart/')) {
+      headers.set('content-type', this.contentType);
+    }
+
     return client.fetch(this.resolvedUrl, {
       body: payload,
-      headers: {
-        'content-type': this.contentType,
-      },
+      headers,
       method: this.method,
       redirect: 'follow',
     });
