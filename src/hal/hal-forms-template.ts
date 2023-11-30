@@ -128,8 +128,11 @@ export class HalFormsProperty {
  * As it seems nobody ever cared reading the spec there are massive
  * inconsistencies and lacks which led to some choices being made,
  * hoping they're good ones.
+ * @param TPayload Type of the payload to use with invoke when JSON
+ * is expected
  */
-export class HalFormsTemplate {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class HalFormsTemplate<TPayload = any> {
   /**
    * Relationship between this template and its parent. Special value
    * default represents the default action to apply to the resource
@@ -210,7 +213,7 @@ export class HalFormsTemplate {
    * @returns A promise resolving when request completes or fails.
    */
   invoke(
-    payload?: BodyInit | null | object,
+    payload?: BodyInit | null | TPayload,
     client?: SimpleHalClient
   ): Promise<HalResponse> {
     if (client === undefined) {
